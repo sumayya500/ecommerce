@@ -1,0 +1,134 @@
+{% comment %} <form method="post">
+    {% csrf_token %}
+    {{ form.email }}
+    {{ form.password }}
+    <button type="submit">Login</button>
+</form>
+{% if messages %}
+{% for message in messages %}
+{{message}}
+{% endfor %}
+{% endif %} {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e9ecef;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 2.5rem;
+        }
+        .login-header {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            color: #495057;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-group label {
+            font-weight: 500;
+            color: #495057;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-control {
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            background-color: #007bff;
+            border: none;
+            color: #ffffff;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .message-container {
+            margin-top: 15px;
+        }
+        .text-center p {
+            color: #6c757d;
+        }
+        .text-center a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .text-center a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-header">Login to Your Account</div>
+    <form method="post">
+    {% csrf_token %}
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password">
+        </div>
+
+        <button type="submit" class="btn submit-btn">Login</button>
+    </form>
+
+    <!-- Message display area -->
+    <div class="message-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mt-2" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-4">
+        <p>Don’t have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

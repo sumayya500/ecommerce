@@ -1,0 +1,33 @@
+
+
+{% comment %} <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Product</button>
+</form> {% endcomment %}
+
+<!-- Inside add_product.html -->
+
+<h2>Add Product</h2>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}  <!-- Render the form -->
+  <button type="submit" class="btn btn-primary">Add Product</button>
+</form>
+
+<h2>Product List</h2>
+<div class="product-list">
+  {% for product in products %}
+  <div class="card mb-3">
+    <img src="{{ product.img.url }}" class="card-img-top" alt="{{ product.name }}">
+    <div class="card-body">
+      <h5 class="card-title">{{ product.name }}</h5>
+      <p class="card-text">{{ product.desc }}</p>
+      <p class="card-text"><strong>Price:</strong> {{ product.price }}</p>
+      <p class="card-text"><strong>Category:</strong> {{ product.category_name }}</p>
+    </div>
+  </div>
+  {% empty %}
+  <p>No products available.</p>
+  {% endfor %}
+</div>

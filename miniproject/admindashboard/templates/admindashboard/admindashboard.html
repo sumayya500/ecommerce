@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Admin Dashboard</h1>
+        
+        <nav>
+            <ul>
+                <li><a href="{% url 'admindashboard:user_management' %}">Manage Users</a></li>
+                <li><a href="{% url 'admindashboard:product_dashboard' %}">Product Dashboard</a></li>
+                <li><a href="{% url 'admindashboard:add_product' %}">Product Dashboard</a></li>
+            </nav>
+            </ul>
+</nav>
+
+        <section>
+            <h2>Overview</h2>
+            <p>Here you can manage products, users, and orders.</p>
+        </section>
+    </div>
+    admin dashbrd
+
+<style> 
+        /* Basic styling for dashboard */
+        .dashboard-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</body>
+</html>
