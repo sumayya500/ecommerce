@@ -1,10 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
+from django.contrib.auth import get_user_model
 
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser
+
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(
@@ -38,3 +37,12 @@ class SignupForm(UserCreationForm):
 class LoginForm(forms.Form):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+
+
+
+User = get_user_model()
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone_number'] 

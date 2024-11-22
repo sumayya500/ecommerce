@@ -1,0 +1,334 @@
+ {% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.categoryname }} - Products</title>
+</head>
+<body>
+    <h1>Products in {{ category.categoryname }}</h1>
+
+    {% if products %}
+        <div class="product-list">
+            {% for product in products %}
+                <div class="product-item">
+                    <h2>{{ product.name }}</h2>
+                    <img src="{{ product.img.url }}" alt="{{ product.name }}" style="width: 200px; height: 200px;">
+                    <p><strong>Description:</strong> {{ product.desc }}</p>
+                    <p><strong>Price:</strong> ${{ product.price }}</p>
+                    <p><strong>Stock:</strong> {{ product.stock }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No products found in this category.</p>
+    {% endif %}
+</body>
+</html>  
+ {% endcomment %}
+{% comment %} 
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.categoryname }} - Products</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        /* Container styling */
+        .product-container {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        /* Row and card layout */
+        .product-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .product-column {
+            flex: 1 1 calc(33.33% - 1.5rem);
+            max-width: calc(33.33% - 1.5rem);
+            min-width: 280px;
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        /* Image size adjustment */
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain; /* Ensures the image fits without stretching */
+            border-bottom: 1px solid #ddd;
+        }
+        .card-body {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .card-title {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+        .description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .btn-cart, .btn-wishlist {
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.6rem;
+        }
+        .btn-cart {
+            flex-grow: 1;
+            border: 1px solid #333;
+        }
+        .btn-wishlist {
+            border: 1px solid #888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="product-container">
+    <div class="section-header">
+        <h2 class="fw-normal">{{ category.categoryname }}</h2>
+    </div>
+
+    <div class="product-row">
+        {% if products %}
+            {% for product in products %}
+            <div class="product-column">
+                <div class="card">
+                    <a href="single-product.html">
+                        <img src="{{ product.img.url }}" alt="{{ product.name }}">
+                    </a>
+                    <div class="card-body">
+                        <a href="single-product.html" class="text-decoration-none">
+                            <h3 class="card-title">{{ product.name }}</h3>
+                        </a>
+                        <div class="price">${{ product.price }}</div>
+                        <p class="description">{{ product.desc|truncatechars:50 }}</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="#" class="btn btn-outline-dark btn-cart">Add to Cart</a>
+                            <a href="#" class="btn btn-outline-secondary btn-wishlist">
+                                <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No products found in this category.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.categoryname }} - Products</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        /* Define the root variables for color and fonts */
+        :root {
+            --accent-color: #DEAD6F;
+            --dark-color: #222222;
+            --light-dark-color: #727272;
+            --light-color: #fff;
+            --grey-color: #dbdbdb;
+            --light-grey-color: #fafafa;
+            --primary-color: #6995B1;
+            --light-primary-color: #eef1f3;
+            --body-font: 'Chilanka', cursive;
+            --heading-font: 'Chilanka', cursive;
+            --secondary-font: 'Montserrat', sans-serif;
+        }
+
+        /* Global font and background styling */
+        body {
+            font-family: var(--body-font);
+            background-color: var(--light-grey-color);
+            color: var(--dark-color);
+        }
+        
+        .product-container {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-family: var(--heading-font);
+            color: var(--primary-color);
+        }
+
+        /* Row and card layout */
+        .product-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .product-column {
+            flex: 1 1 calc(33.33% - 1.5rem);
+            max-width: calc(33.33% - 1.5rem);
+            min-width: 280px;
+        }
+
+        .card {
+            background-color: var(--light-color);
+            border: 1px solid var(--grey-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            font-family: var(--secondary-font);
+        }
+
+        /* Image size adjustment */
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain; /* Ensures the image fits without stretching */
+            border-bottom: 1px solid var(--grey-color);
+        }
+
+        .card-body {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--dark-color);  /* Black color for the product name */
+            margin-bottom: 0.5rem;
+        }
+
+        .price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--accent-color);  /* Accent color for price */
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            color: var(--light-dark-color);  /* Grey color for description */
+            margin-bottom: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .btn-cart {
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid var(--dark-color);  /* Black border for Add to Cart button */
+            color: var(--dark-color);  /* Black text for Add to Cart */
+            background-color: var(--light-color);  /* Light background for Add to Cart */
+        }
+
+        .btn-cart:hover {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+        }
+
+        .btn-wishlist {
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid var(--light-dark-color);
+            color: var(--light-dark-color);
+            background-color: var(--light-color);
+        }
+
+        .btn-wishlist:hover {
+            background-color: var(--light-dark-color);
+            color: var(--light-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="product-container">
+    <div class="section-header">
+        <h2 class="fw-normal">{{ category.categoryname }}</h2>
+    </div>
+
+    <div class="product-row">
+        {% if products %}
+            {% for product in products %}
+            <div class="product-column">
+                <div class="card">
+                    <a href="single-product.html">
+                        <img src="{{ product.img.url }}" alt="{{ product.name }}">
+                    </a>
+                    <div class="card-body">
+                        <a href="single-product.html" class="text-decoration-none">
+                            <h3 class="card-title">{{ product.name }}</h3>
+                        </a>
+                        <div class="price">${{ product.price }}</div>
+                        <p class="description">{{ product.desc|truncatechars:50 }}</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="#" class="btn btn-outline-dark btn-cart">Add to Cart</a>
+                            <a href="#" class="btn btn-outline-secondary btn-wishlist">
+                                <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No products found in this category.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+</body>
+</html>

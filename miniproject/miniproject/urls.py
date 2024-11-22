@@ -20,9 +20,12 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # Admin site
-    path('', include('accounts.urls')),  # Include accounts app URLs
-    path('product/', include('product.urls')),  # Include product app URLs
-    path('admindashboard/', include('admindashboard.urls')),  # Include admin dashboard URLs
+    path('', include('accounts.urls')), 
+    path('product/', include(('product.urls', 'product'))), 
+    path('admindashboard/', include('admindashboard.urls')), 
+    path('cart/', include('cart.urls')),
+    path('order/', include('order.urls')),
+
 ]
 
 if settings.DEBUG:

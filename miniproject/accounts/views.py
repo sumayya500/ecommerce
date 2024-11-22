@@ -10,6 +10,10 @@ from django.contrib.auth import authenticate,login as auth_login
 from .forms import LoginForm  # Import your LoginForm
 from product.models import *
 from product.models import Product, Category
+from .forms import ProfileUpdateForm
+from django.contrib.auth.decorators import login_required
+
+
 
 def index(request):
     products = Product.objects.all()
@@ -120,3 +124,21 @@ def home_view(request):
 
 def logout_view(request):
     return render(request,'accounts/index.html')
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'accounts/profile.html', {'user': request.user})
+
+# @login_required
+# def update_profile(request):
+#     if request.method == 'POST':
+#         form = ProfileUpdateForm(request.POST, instance=request.user)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile')
+#     else:
+#         form = ProfileUpdateForm(instance=request.user)
+#     return render(request, 'accounts/profileupdate.html', {'form': form})
+
+

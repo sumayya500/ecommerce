@@ -263,7 +263,7 @@
 
           <div class="offcanvas-body justify-content-between">
             <select class="filter-categories border-0 mb-0 me-5">
-              <option>Shop by Category</option>
+              <option> Category</option>
               <option>Clothes</option>
               <option>Food</option>
               <option>Food</option>
@@ -287,48 +287,7 @@
                 <a href="index.html" class="nav-link">Others</a>
               </li>
             </ul> 
-            {% comment %} <div class="d-none d-lg-flex align-items-end">
-              <ul class="d-flex justify-content-end list-unstyled m-0">
-              
-                <li>
-                  <a href="index.html" class="mx-3">
-                    <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
-                  </a>
-                </li>
-                <li>
-                  <a href="index.html" class="mx-3">
-                    <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
-                  </a>
-                </li>
-                  
-                <li class="">
-                  <a href="index.html" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
-                    aria-controls="offcanvasCart">
-                    <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
-                    <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
-                      03
-                    </span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="login.html" class="btn btn-primary btn-sm nav-login-btn">Login</a>
-              </li>
-          </ul>
-          
-          <style>
-              /* Ensures the button matches the size and style of other nav links */
-              .nav-login-btn {
-                  font-size: 0.875rem; /* Matches text size of other nav links */
-                  padding: .10rem 0.25rem; /* Makes button height similar to nav links */
-                  line-height: 1.5; /* Adjusts vertical alignment */
-                  margin-left: 10px; /* Adjust for finer control */
-
-              }
-          </style>
-              </ul>
-
-            </div> {% endcomment %}
-
+           
             <div class="d-none d-lg-flex align-items-end">
               <ul class="d-flex justify-content-end list-unstyled m-0">
                   <li>
@@ -337,16 +296,20 @@
                       </a>
                   </li>
                   <li>
-                      <a href="index.html" class="mx-3">
-                          <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
-                      </a>
+                    <a href="{% url 'product:wishlist' %}">
+                      <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
+                  </a>
+
+
                   </li>
                   <li>
-                      <a href="index.html" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                          <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
+                    <a href="{% url 'cart_view' %}"><iconify-icon icon="mdi:cart" class="fs-4"></iconify-icon></a>
+                      {% comment %} <a href="{% url 'cart_view' %}" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"> {% endcomment %}
+                         {% comment %} <a href="{% url 'cart_view' %}">  {% endcomment %}
+                          {% comment %} <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
                           <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
                               03
-                          </span>
+                          </span> {% endcomment %}
                       </a>
                   </li>
                   <li class="nav-item">
@@ -449,88 +412,41 @@
 
   <section id="categories">
     <div class="container my-3 py-5">
-      <div class="row my-5">
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:bowl-food"></iconify-icon>
-            <h5>Foodies</h5>
-          </a>
-        </div>
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:bird"></iconify-icon>
-            <h5>Bird Shop</h5>
-          </a>
-        </div>
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:dog"></iconify-icon>
-            <h5>Dog Shop</h5>
-          </a>
-        </div>
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:fish"></iconify-icon>
-            <h5>Fish Shop</h5>
-          </a>
-        </div>
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:cat"></iconify-icon>
-            <h5>Cat Shop</h5>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-{% comment %} product {% endcomment %}
-
-{% comment %} 
-<section id="clothing" class="my-5 overflow-hidden">
-  <div class="container pb-5">
-    <div class="section-header d-md-flex justify-content-between align-items-center mb-3">
-      <h2 class="display-3 fw-normal">Pet Clothing</h2>
-      <div>
-      </div>
-    </div>
-
-    <div class="products-carousel swiper">
-      <div class="swiper-wrapper">
-
-        {% for product in products %}
-        <div class="swiper-slide">
-          <div class="card position-relative">
-            <a href="single-product.html">
-              <img src="{{ product.img.url }}" class="img-fluid rounded-4" alt="{{ product.name }}">
-            </a>
-            <div class="card-body p-0">
-              <a href="single-product.html">
-                <h3 class="card-title pt-4 m-0">{{ product.name }}</h3>
-              </a>
-              <div class="card-text">
-                <h3 class="secondary-font text-primary">{{ product.price }}</h3>
-                <h3 class="secondary-font text-primary">{{ product.category_name }}</h3>
-                <h3 class="secondary-font text-primary">{{ product.desc|truncatechars:40}}</h3>
-                <div class="d-flex flex-wrap mt-3">
-                  <a href="#" class="btn-cart me-3 px-4 pt-3 pb-3">
-                    <h5 class="text-uppercase m-0">Add to Cart</h5>
-                  </a>
-                  <a href="#" class="btn-wishlist px-4 pt-3">
-                    <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
-                  </a>
-                </div>
-              </div>
+        <div class="row my-5">
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'foods' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:bowl-food"></iconify-icon>
+                    <h5>Foodies</h5>
+                </a>
             </div>
-          </div>
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'bird shop' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:bird"></iconify-icon>
+                    <h5>Bird Shop</h5>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'dog shop' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:dog"></iconify-icon>
+                    <h5>Dog Shop</h5>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'fish shop' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:fish"></iconify-icon>
+                    <h5>Fish Shop</h5>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'cat shop' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:cat"></iconify-icon>
+                    <h5>Cat Shop</h5>
+                </a>
+            </div>
         </div>
-        {% endfor %}
-
-      </div>
     </div>
-  </div>
-</section> {% endcomment %}
-<section id="clothing" class="my-5">
+</section>
+
   <div class="container pb-5">
     <div class="section-header d-md-flex justify-content-between align-items-center mb-3">
       <h2 class="display-3 fw-normal">Pet Clothing</h2>
@@ -539,9 +455,9 @@
 
     <div class="row">
       {% for product in products %}
-      <div class="col-md-4 mb-4">  <!-- Adjust the column size based on your layout preference -->
+      <div class="col-md-4 mb-4"> 
         <div class="card h-100 d-flex flex-column">
-          <a href="single-product.html">
+          <a href="{% url 'product:product_detail' product.id  %}">
             <img src="{{ product.img.url }}" class="img-fluid rounded-4" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
           </a>
           <div class="card-body d-flex flex-column p-3">
@@ -555,12 +471,16 @@
             </div>
             <div class="mt-auto">
               <div class="d-flex flex-wrap">
-                <a href="#" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
+                {% comment %} <a href="#" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
                   Add to Cart
-                </a>
-                <a href="#" class="btn btn-outline-secondary btn-sm">
+                </a> {% endcomment %}
+              <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
+                Add to Cart
+              </a> 
+                <a href="{% url 'product:add_to_wishlist' product.id %}" class="btn btn-outline-secondary btn-sm">
                   <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
-                </a>
+              </a>
+              
               </div>
             </div>
           </div>
@@ -571,45 +491,8 @@
   </div>
 </section>
 
-
-
-
-
-
-
-
-
-{% comment %}   
-  <div class="card position-relative">
-    {% for product in products%}
-    <a href="single-product.html"><img src="{{product.img.url}}" class="img-fluid rounded-4" alt="image"></a>
-    <div class="card-body p-0">
-      <a href="single-product.html">
-        <h3 class="card-title pt-4 m-0">{{product.name}}</h3>
-      </a>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item"><b>category</b>:{{product.category_name}}</li>
-        <li class="list-group-item"><b>price</b>:{{product.price}}</li>
-       
-      </ul>
-
-        <div class="d-flex flex-wrap mt-3">
-        
-          <a href="#" class="btn-wishlist px-4 pt-3 ">
-            <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
-          </a>
-        </div>
-
-      </div>
-
-    </div>
-    {% endfor %}
-  </div>
-</div> {% endcomment %}
-
 </div>
 </header>
-
   <section id="testimonial">
     <div class="container my-5 py-5">
       <div class="row">
@@ -888,71 +771,6 @@
       </div>
     </div>
   </section>
-
-  <footer id="footer" class="my-5">
-    <div class="container py-5 my-5">
-      <div class="row">
-
-        <div class="col-md-3">
-          <div class="footer-menu">
-            <img src="{% static "images/logo.png" %}" alt="logo">
-            <p class="blog-paragraph fs-6 mt-3">Subscribe to our newsletter to get updates about our grand offers.</p>
-            <div class="social-links">
-              <ul class="d-flex list-unstyled gap-2">
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:facebook-fill"></iconify-icon>
-                  </a>
-                </li>
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:twitter-fill"></iconify-icon>
-                  </a>
-                </li>
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:pinterest-fill"></iconify-icon>
-                  </a>
-                </li>
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:instagram-fill"></iconify-icon>
-                  </a>
-                </li>
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:youtube-fill"></iconify-icon>
-                  </a>
-                </li>
-
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="footer-menu">
-            <h3>Quick Links</h3>
-            <ul class="menu-list list-unstyled">
-              <li class="menu-item">
-                <a href="#" class="nav-link">Home</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">About us</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Offer </a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Services</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Conatct Us</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-  
-
   <script src="{% static "js/jquery-1.11.0.min.js" %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"

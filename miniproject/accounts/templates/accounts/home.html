@@ -287,24 +287,35 @@
                 <a href="index.html" class="nav-link">Others</a>
               </li>
             </ul> 
-            <div class="d-none d-lg-flex align-items-end">
+            {% comment %} <div class="d-none d-lg-flex align-items-end">
               <ul class="d-flex justify-content-end list-unstyled m-0">
                   <li>
                       <a href="index.html" class="mx-3">
                           <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
                       </a>
-                  </li>
+                  </li> {% endcomment %}
+                  
+            <div class="d-none d-lg-flex align-items-end">
+              <ul class="d-flex justify-content-end list-unstyled m-0">
                   <li>
-                      <a href="index.html" class="mx-3">
-                          <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
+                      <a href="{% url 'profile' %}" class="mx-3">
+                          <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
                       </a>
                   </li>
                   <li>
-                      <a href="index.html" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                          <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
+                    <a href="{% url 'product:wishlist' %}"><iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon></a>
+
+
+
+                  </li>
+                 
+                  <li>
+                      {% comment %} <a href="{%  'cart_viurlew' %}" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"> {% endcomment %}
+                        <a href="{% url 'cart_view' %}"><iconify-icon icon="mdi:cart" class="fs-4"></iconify-icon></a>
+                          {% comment %} <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
                           <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
                               03
-                          </span>
+                          </span> {% endcomment %}
                       </a>
                   </li>
                   <li class="nav-item">
@@ -412,40 +423,42 @@
 
   <section id="categories">
     <div class="container my-3 py-5">
-      <div class="row my-5">
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:bowl-food"></iconify-icon>
-            <h5>Foodies</h5>
-          </a>
+        <div class="row my-5">
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'foods' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:bowl-food"></iconify-icon>
+                    <h5>Foodies</h5>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'bird shop' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:bird"></iconify-icon>
+                    <h5>Bird Shop</h5>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'dog shop' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:dog"></iconify-icon>
+                    <h5>Dog Shop</h5>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'fish shop' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:fish"></iconify-icon>
+                    <h5>Fish Shop</h5>
+                </a>
+            </div>
+            <div class="col text-center">
+                <a href="{% url 'product:category_view' 'cat shop' %}" class="categories-item">
+                    <iconify-icon class="category-icon" icon="ph:cat"></iconify-icon>
+                    <h5>Cat Shop</h5>
+                </a>
+            </div>
         </div>
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:bird"></iconify-icon>
-            <h5>Bird Shop</h5>
-          </a>
-        </div>
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:dog"></iconify-icon>
-            <h5>Dog Shop</h5>
-          </a>
-        </div>
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:fish"></iconify-icon>
-            <h5>Fish Shop</h5>
-          </a>
-        </div>
-        <div class="col text-center">
-          <a href="#" class="categories-item">
-            <iconify-icon class="category-icon" icon="ph:cat"></iconify-icon>
-            <h5>Cat Shop</h5>
-          </a>
-        </div>
-      </div>
     </div>
-  </section>
+</section>
+
+
 
 <section id="clothing" class="my-5">
   <div class="container pb-5">
@@ -458,7 +471,7 @@
       {% for product in products %}
       <div class="col-md-4 mb-4">  <!-- Adjust the column size based on your layout preference -->
         <div class="card h-100 d-flex flex-column">
-          <a href="single-product.html">
+          <a href="{% url 'product:product_detail' product.id  %}">
             <img src="{{ product.img.url }}" class="img-fluid rounded-4" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
           </a>
           <div class="card-body d-flex flex-column p-3">
@@ -472,12 +485,21 @@
             </div>
             <div class="mt-auto">
               <div class="d-flex flex-wrap">
-                <a href="#" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
+
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
+                  Add to Cart
+                </a> 
+                  <a href="{% url 'product:add_to_wishlist' product.id %}" class="btn btn-outline-secondary btn-sm">
+                    <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
+                </a>
+                
+
+                {% comment %} <a href="#" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
                   Add to Cart
                 </a>
                 <a href="#" class="btn btn-outline-secondary btn-sm">
                   <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
-                </a>
+                </a> {% endcomment %}
               </div>
             </div>
           </div>

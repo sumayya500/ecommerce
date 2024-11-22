@@ -1,0 +1,8 @@
+<!-- In accounts/templates/accounts/profile.html -->
+<h1>Profile</h1>
+<p>First name: {{ user.first_name }}</p>
+<p>Last name: {{ user.last_name }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Phone number: {{ user.phone_number }}</p>  <!-- Adjust field names as needed -->
+
+{% comment %} <a href="{% url 'accounts:update_profile' %}">Edit Profile</a> {% endcomment %}

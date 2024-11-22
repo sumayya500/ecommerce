@@ -89,3 +89,56 @@ def delete_product(request, product_id):
     
     return render(request, 'admindashboard/deleteproduct.html', {'product': product})  # Render a confirmation page if not POST
 
+
+User = get_user_model()
+
+def profile(request):
+    return render(request, 'admindashboard/profile.html', {'user': request.user})
+
+def edit_profile(request):
+    user = request.user
+
+    if request.method == 'POST':
+        user.username = request.POST.get('username')
+        user.email = request.POST.get('email')
+        if 'phone_number' in request.POST:  # Check if the field exists
+            user.phone_number = request.POST.get('phone_number')  # Assuming you have this field
+        user.save()
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('profile')
+
+    return render(request, 'admindashboard/edit_profile.html', {'user': user})
+
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'admindashboard/categorylist.html', {'categories': categories})
+
+
+
+# Add Category (No Form)
+def add_category(request):
+    if request.method == 'POST':
+        category_name = request.POST.get('categoryname')
+        if category_name:
+            Category.objects.create(categoryname=category_name)
+            return redirect('category_list')
+    return render(request, 'admindashboard/categoryadd.html')
+
+# Edit Category (No Form)
+def edit_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        category_name = request.POST.get('categoryname')
+        if category_name:
+            category.categoryname = category_name
+            category.save()
+            return redirect('category_list')
+    return render(request, 'admindashboard/categoryedit.html', {'category': category})
+
+# Delete Category
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        category.delete()
+        return redirect('category_list')
+    return render(request, 'admindashboard/categorydelete.html', {'category': category})
