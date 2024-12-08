@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Pet E-commerce Shop</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F9E5D3; /* Updated background color */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .contact-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .contact-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .contact-form {
+            margin-top: 20px;
+        }
+        .form-control:focus {
+            border-color: #DEAD6F;
+            box-shadow: 0 0 0 0.2rem rgba(222, 173, 111, 0.25);
+        }
+        .btn-primary {
+            background-color: #DEAD6F;
+            border-color: #DEAD6F;
+        }
+        .btn-primary:hover {
+            background-color: #c09c61;
+            border-color: #c09c61;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contact-container">
+        <div class="contact-header">
+            <h1>Contact Us</h1>
+            <p>If you have any questions or need assistance, please fill out the form below. We'd love to hear from you!</p>
+        </div>
+        <div class="contact-form">
+            <form action="" method="post" id="contactForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcd.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById("contactForm").onsubmit = function(e) {
+            e.preventDefault(); // Prevent actual form submission
+            this.reset(); // Reset form fields
+        };
+    </script>
+</body>
+
+</html>

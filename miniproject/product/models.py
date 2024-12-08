@@ -23,6 +23,7 @@ class Product(models.Model):
     img=models.ImageField(upload_to='products/')
     stock=models.IntegerField(default=0)
 
+
     def get_discounted_price(self):
         """
         Returns the price after applying the discount.

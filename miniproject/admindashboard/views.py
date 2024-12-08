@@ -1,4 +1,5 @@
 # admindashboard/views.py
+from venv import logger
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from accounts.models import CustomUser
@@ -8,11 +9,14 @@ from product.models import Product, Category
 from product.forms import ProductForm
 from django.urls import reverse
 from django.contrib import messages
-
-
+from order.models import Orders,Payments
+from django.db.models.functions import Coalesce
+from django.utils.safestring import mark_safe 
+import json
+from django.db.models import Sum
 
 def admin_required(user):
-    return user.is_staff  
+    return user.is_staff 
 
 
 
@@ -21,7 +25,32 @@ def admin_required(user):
 def admin_dashboard(request):
     return render(request, 'admindashboard/admindashboard.html')
 
-User = get_user_model()
+
+
+def admin_view(request):
+  
+    total_orders = Orders.objects.count()
+    total_categories = Category.objects.count()
+    total_products = Product.objects.count()
+    total_users = CustomUser.objects.count()
+    cod_payment = Orders.objects.filter(payment_method='COD', is_paid=True).aggregate(total=Sum('total'))['total'] or 0
+    stripe_payment = Orders.objects.filter(payment_method='STRIPE', is_paid=True).aggregate(total=Sum('total'))['total'] or 0
+
+    total_revenue = cod_payment + stripe_payment
+
+    context = {
+        'total_orders': total_orders,
+        'total_categories': total_categories,
+        'total_products': total_products,
+        'total_users': total_users,
+        'cod_payment': cod_payment,
+        'stripe_payment': stripe_payment,
+        'total_revenue': total_revenue,
+    }
+
+    return render(request, 'admindashboard/adminview.html', context)
+
+
 
 def user_management(request):
     users = CustomUser.objects.all()
@@ -92,22 +121,6 @@ def delete_product(request, product_id):
 
 User = get_user_model()
 
-def profile(request):
-    return render(request, 'admindashboard/profile.html', {'user': request.user})
-
-def edit_profile(request):
-    user = request.user
-
-    if request.method == 'POST':
-        user.username = request.POST.get('username')
-        user.email = request.POST.get('email')
-        if 'phone_number' in request.POST:  # Check if the field exists
-            user.phone_number = request.POST.get('phone_number')  # Assuming you have this field
-        user.save()
-        messages.success(request, 'Profile updated successfully!')
-        return redirect('profile')
-
-    return render(request, 'admindashboard/edit_profile.html', {'user': user})
 
 def category_list(request):
     categories = Category.objects.all()
@@ -142,3 +155,78 @@ def delete_category(request, pk):
         category.delete()
         return redirect('category_list')
     return render(request, 'admindashboard/categorydelete.html', {'category': category})
+
+def admin_order(request):
+    # Toggle is_paid status if order_id is provided in GET request
+    order_id = request.GET.get('order_id')
+    if order_id:
+        try:
+            order = Orders.objects.get(id=order_id)
+            order.is_paid = not order.is_paid
+            order.save()
+        except Orders.DoesNotExist:
+            pass  # Handle the case where the order does not exist
+
+        return redirect(reverse('admindashboard:admin_order'))
+
+    # Render the orders page with all orders
+    orders = Orders.objects.select_related('address', 'cart', 'user').order_by('-created').all()
+    return render(request, 'admindashboard/admin_order.html', {'orders': orders})
+
+
+def admin_update_order_status(request):
+    if request.method == "POST":
+        orders = Orders.objects.all()
+        for order in orders:
+            new_status = request.POST.get(f"status_{order.id}")
+            if new_status and new_status != order.status:
+                order.status = new_status
+                order.save()
+                messages.success(request, f"Order {order.id} status updated to {new_status}.")
+        return redirect('admindashboard:admin_order')
+    return redirect('admin_order')
+
+def approve_return(request, order_id):
+    order = get_object_or_404(Orders, id=order_id)
+
+    
+    if not request.user.is_staff:
+        messages.error(request, "Permission denied: Only staff can approve returns.")
+        return redirect('admin_order')
+
+    # Check if return request conditions are met
+    if not order.return_requested:
+        messages.error(request, "Return request not initiated for this order.")
+        return redirect('admin_order')
+
+    if order.return_approved:
+        messages.error(request, "This order's return has already been approved.")
+        return redirect('admin_order')
+
+    if order.is_refunded:
+        messages.error(request, "This order has already been refunded.")
+        return redirect('admin_order')
+
+    try:
+
+        # Handle wallet update if order was paid
+        if order.is_paid:
+
+            order.return_approved = True
+            order.status = "Returned"
+            order.is_refunded = True  # Mark as refunded
+            order.save()
+            # Update user's wallet
+            order.user.wallet += order.total
+            order.user.save()
+            messages.success(request, "Return request approved and amount added to wallet.")
+            logger.info(f"Return approved for Order ID {order_id}. Wallet updated for user {order.user.id}.")
+        else:
+            messages.warning(request, "Order was not paid. No amount added to wallet.")
+
+        # Additional logging
+
+    except Exception as e:
+        messages.error(request, f"An error occurred while approving the return: {e}")
+
+    return redirect('admin_order')

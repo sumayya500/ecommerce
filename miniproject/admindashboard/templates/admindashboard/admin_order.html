@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Orders</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .card {
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .card-header {
+            background-color: #DEAD6F;
+            color: #fff;
+            padding: 15px;
+            font-size: 1.5rem;
+            border-bottom: none;
+            text-align: center;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        .table th,
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .form-select-sm {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: #DEAD6F;
+            border-color: #DEAD6F;
+            width: auto;
+            padding: 10px 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #c09c61;
+            border-color: #c09c61;
+        }
+
+        .btn-info {
+            background-color: #6f42c1;
+            border-color: #6f42c1;
+        }
+
+        .btn-info:hover {
+            background-color: #563d7c;
+            border-color: #563d7c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-header">
+                Admin Orders
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'admindashboard:admin_update_order_status' %}">
+                    <button type="submit" class="btn btn-primary mb-3">Update Status</button>
+                    {% csrf_token %}
+                    <table class="table table-bordered table-hover mt-1">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Order ID</th>
+                                <th>User Email</th>
+                                <th style="width: 20%;">Address</th>
+                                <th>Status</th>
+                                <th>Total (Rs.)</th>
+                                <th>Payment Method</th>
+                                <th>Paid</th>
+                                <th>Order Date</th>
+                                <th>Updated Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.user.username }}</td>
+                                <td>
+                                    {{ order.address.address }}<br>
+                                    {{ order.address.pin }}<br>
+                                    {{ order.address.place }}<br>
+                                    {{ order.address.district}} - {{ order.address.state }}
+                                </td>
+                                <td>
+                                    <select name="status_{{ order.id }}" class="form-select form-select-sm">
+                                        {% for choice, display in order.ORDER_STATUS %}
+                                        <option value="{{ choice }}" {% if order.status == choice %}selected{% endif %}>
+                                            {{ display }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>Rs. {{ order.total|floatformat:2 }}</td>
+                                <td>{{ order.get_payment_method_display }}</td>
+                                <td>
+                                    <a href="{% url 'admindashboard:admin_order' %}?order_id={{ order.id }}"
+                                        onclick="return confirm('Are you sure you want to change the payment status?');"
+                                        class="btn btn-sm {% if order.is_paid %}btn{% else %}btn-danger{% endif %}">
+                                        {% if order.is_paid %}is_Paid{% else %}Unpaid{% endif %}
+                                    </a>
+                                </td>
+                                <td>{{ order.created|date:"Y-m-d H:i" }}</td>
+                                <td>{{ order.updated|date:"Y-m-d H:i" }}</td>
+                                <td>
+                                    {% if order.return_requested and not order.return_approved and not order.is_refunded %}
+                                    <a class="btn btn-info" href="{% url 'approve_return' order.id %}">Approve Return</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -11,7 +11,8 @@ class CustomUser(AbstractUser):
     otp = models.CharField(max_length=6, blank=True, null=True)
     email_verified = models.BooleanField(default=False)
     verification_code = models.UUIDField(default=uuid.uuid4, editable=False)
-
+    wallet = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 

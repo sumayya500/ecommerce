@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Orders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #F9E5D3;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #DEAD6F;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        table th {
+            background-color: #f5f5f5;
+            color: #333;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #fff;
+            display: inline-block;
+        }
+        .badge-warning { background-color: #ffc107; }
+        .badge-info { background-color: #17a2b8; }
+        .badge-success { background-color: #28a745; }
+        .badge-danger { background-color: #dc3545; }
+        .badge-secondary { background-color: #6c757d; }
+        .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            margin-right: 5px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #DEAD6F;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #c09c61;
+        }
+        .btn-danger { background-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-info { background-color: #17a2b8; }
+        .btn-info:hover { background-color: #138496; }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .text-muted {
+            color: #6c757d;
+        }
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>My Orders</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Order ID</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Total (Rs.)</th>
+                <th>Payment Method</th>
+                <th>Paid</th>
+                <th>Order Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ order.id }}</td>
+                <td>{{ order.address }}</td>
+                <td>
+                    <span class="badge 
+                        {% if order.status == 'Pending' %}badge-warning
+                        {% elif order.status == 'Dispatched' %}badge-info
+                        {% elif order.status == 'Delivered' %}badge-success
+                        {% elif order.status == 'Cancelled' %}badge-danger
+                        {% elif order.status == 'Returned' %}badge-secondary
+                        {% endif %}">
+                        {{ order.get_status_display }}
+                    </span>
+                </td>
+                <td>Rs. {{ order.total|floatformat:2 }}</td>
+                <td>{{ order.get_payment_method_display }}</td>
+                <td>{{ order.is_paid|yesno:"Yes,No" }}</td>
+                <td>{{ order.created|date:"Y-m-d H:i" }}</td>
+                <td class="actions">
+                     <a href="{% url 'order:user_order_track' order.id %}" class="btn btn-primary btn-sm" title="Track Status">
+                        <i class="fa fa-truck"></i> Track
+                    </a> 
+                    {% if order.status == "Pending" %}
+                        <a href="{% url 'order:change_order_status' order.id %}?status=Cancelled"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Cancel this order?');">
+                            Cancel
+                        </a>
+                    {% endif %}
+                    {% if order.status == "Delivered" %}
+                        {% if not order.return_requested and not order.is_refunded %}
+                            <form action="{% url 'order:request_return' order.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-info btn-sm">Request Return</button>
+                            </form>
+                        {% else %}
+                            <p class="text-muted mb-0">
+                                {% if order.return_requested %}
+                                    Return requested.
+                                {% elif order.is_refunded %}
+                                    Order refunded.
+                                {% endif %}
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html> 
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        #myorder {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        h3 {
+            font-family: 'Georgia', serif;
+            font-size: 1.75em;
+            font-weight: 500;
+            color: #333;
+        }
+        .table thead {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
+            font-size: 0.9em;
+            padding: 5px 10px;
+        }
+        .btn i {
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<hr class="mt-0">
+<div class="card shadow m-5" id="myorder">
+    <div class="card-body">
+        <div class="container-fluid">
+            <h3>My Orders</h3>
+            <table class="table table-bordered table-hover mt-4">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Order ID</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Total (Rs.)</th>
+                        <th>Payment Method</th>
+                        <th>Paid</th>
+                        <th>Order Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.address }}</td>
+                        <td>
+                            <a href="{% url 'user_order_track' order.id %}" class="btn btn-primary btn-sm" title="Track Status">
+                                <i class="fa fa-truck"></i> {{ order.get_status_display }}
+                            </a>
+                        </td>
+                        <td>Rs. {{ order.total|floatformat:2 }}</td>
+                        <td>{{ order.get_payment_method_display }}</td>
+                        <td>{{ order.is_paid|yesno:"Yes,No" }}</td>
+                        <td>{{ order.created|date:"Y-m-d H:i" }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if order.status == 'Pending' %}bg-warning
+                                {% elif order.status == 'Dispatched' %}bg-info
+                                {% elif order.status == 'Delivered' %}bg-success
+                                {% elif order.status == 'Cancelled' %}bg-danger
+                                {% elif order.status == 'Returned' %}bg-secondary
+                                {% endif %}">
+                                {{ order.status }}
+                            </span>
+                       
+                            {% if order.status == "Pending" %}
+                                <a href="{% url 'change_order_status' order.id %}?status=Cancelled"
+                                   class="btn btn-danger btn-sm ms-2"
+                                   onclick="return confirm('Cancel this order?');">
+                                    Cancel
+                                </a>
+                            {% endif %}
+                           
+                            {% if order.status == "Delivered" %}
+                                {% if not order.return_requested and not order.is_refunded %}
+                                    <form action="{% url 'request_return' order.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-info">Request Return</button>
+                                    </form>
+                                {% else %}
+                                    <p class="text-muted">
+                                        {% if order.return_requested %}
+                                            Return requested.
+                                        {% elif order.is_refunded %}
+                                            Order refunded.
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+                                {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html> {% endcomment %}

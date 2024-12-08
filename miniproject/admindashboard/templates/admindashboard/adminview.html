@@ -1,0 +1,228 @@
+ {% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .card { border: 1px solid #ddd; border-radius: 5px; padding: 20px; margin: 10px; }
+        .grid { display: flex; flex-wrap: wrap; gap: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <div class="dashboard-overview">
+        <h2>Admin Dashboard</h2>
+        <p>Total Orders: {{ total_orders }}</p>
+        <p>Total Categories: {{ total_categories }}</p>
+        <p>Total Products: {{ total_products }}</p>
+        <p>Total Users: {{ total_users }}</p>
+        <p>Total COD Payments: ${{ cod_payment|floatformat:2 }}</p>
+        <p>Total Stripe Payments: ${{ stripe_payment|floatformat:2 }}</p>
+        <h3>Total Revenue: ${{ total_revenue|floatformat:2 }}</h3>
+    </div>
+    
+</body>
+</html>  {% endcomment %}
+
+{% comment %} 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .stats, .revenue {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .stat-item, .revenue-item {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .stat-item h3, .revenue-item h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p, .revenue-item p {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-overview">
+        <h2>Admin Dashboard</h2>
+        <p>Total Orders: {{ total_orders }}</p>
+        <p>Total Categories: {{ total_categories }}</p>
+        <p>Total Products: {{ total_products }}</p>
+        <p>Total Users: {{ total_users }}</p>
+        <p>Total COD Payments: ${{ cod_payment|floatformat:2 }}</p>
+        <p>Total Stripe Payments: ${{ stripe_payment|floatformat:2 }}</p>
+        <h3>Total Revenue: ${{ total_revenue|floatformat:2 }}</h3>
+    </div>
+    
+
+</body>
+</html> 
+
+ {% endcomment %}
+
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2, h3 {
+            margin: 0;
+            padding: 10px 0;
+            color: #4CAF50;
+        }
+        p {
+            margin: 5px 0;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            margin: 10px 0;
+            color: #4CAF50;
+        }
+
+        .card p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <div class="dashboard-container">
+        <h2>Overview</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Total Orders</h3>
+                <p>{{ total_orders }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Categories</h3>
+                <p>{{ total_categories }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Products</h3>
+                <p>{{ total_products }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Users</h3>
+                <p>{{ total_users }}</p>
+            </div>
+            <div class="card">
+                <h3>Total COD Payments</h3>
+                <p>${{ cod_payment|floatformat:2 }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Stripe Payments</h3>
+                <p>${{ stripe_payment|floatformat:2 }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Revenue</h3>
+                <p>${{ total_revenue|floatformat:2 }}</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Admin Dashboard. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -178,19 +178,21 @@
             </a>
           </div>
         </div>
-
         <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
           <div class="search-bar border rounded-2 px-3 border-dark-subtle">
-            <form id="search-form" class="text-center d-flex align-items-center" action="" method="">
-              <input type="text" class="form-control border-0 bg-transparent"
-                placeholder="Search for more than 10,000 products" />
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                  d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
-              </svg>
+            <form id="search-form" class="text-center d-flex align-items-center" action="{% url 'product:product_search' %}" method="get">
+              <input type="text" name="q" class="form-control border-0 bg-transparent"
+                placeholder="Search for more than 10,000 products" value="{{ request.GET.q }}" />
+              <button type="submit" class="btn p-0 border-0 bg-transparent">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
+                </svg>
+              </button>
             </form>
           </div>
         </div>
+       
 
         <div
           class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
@@ -208,6 +210,12 @@
         </div>
       </div>
     </div>
+
+    <div class="container-fluid mt-4">
+      {% if query %}
+          <h4 class="text-center mb-4">Search results for "{{ query }}"</h4>
+      {% endif %}
+  </div>
 
     <div class="container-fluid">
       <hr class="m-0">
@@ -272,33 +280,22 @@
 
              <ul class="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0">
               <li class="nav-item">
-                <a href="index.html" class="nav-link active">Home</a>
+                <a href="{% url 'accounts:home' %}" class="nav-link active">Home</a>
               </li>
               <li class="nav-item">
-                <a href="index.html" class="nav-link">Shop</a>
+                <a href="{% url 'other:shop'%}" class="nav-link">Shop</a>
               </li>
               <li class="nav-item">
-                <a href="index.html" class="nav-link">Blog</a>
+                <a href="{% url 'other:blog'%}" class="nav-link">Blog</a>
               </li>
               <li class="nav-item">
-                <a href="index.html" class="nav-link">Contact</a>
+                <a href="{% url 'other:contact'%}" class="nav-link">Contact</a>
               </li>
-              <li class="nav-item">
-                <a href="index.html" class="nav-link">Others</a>
-              </li>
-            </ul> 
-            {% comment %} <div class="d-none d-lg-flex align-items-end">
-              <ul class="d-flex justify-content-end list-unstyled m-0">
-                  <li>
-                      <a href="index.html" class="mx-3">
-                          <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
-                      </a>
-                  </li> {% endcomment %}
-                  
+            </ul>             
             <div class="d-none d-lg-flex align-items-end">
               <ul class="d-flex justify-content-end list-unstyled m-0">
                   <li>
-                      <a href="{% url 'profile' %}" class="mx-3">
+                      <a href="{% url 'accounts:profile' %}" class="mx-3">
                           <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
                       </a>
                   </li>
@@ -308,21 +305,15 @@
 
 
                   </li>
-                 
                   <li>
-                      {% comment %} <a href="{%  'cart_viurlew' %}" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"> {% endcomment %}
-                        <a href="{% url 'cart_view' %}"><iconify-icon icon="mdi:cart" class="fs-4"></iconify-icon></a>
-                          {% comment %} <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
-                          <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
-                              03
-                          </span> {% endcomment %}
+                      <a href="{% url 'cart_view' %}"><iconify-icon icon="mdi:cart" class="fs-4"></iconify-icon></a>  
                       </a>
                   </li>
                   <li class="nav-item">
                     {% if user.is_authenticated%}
-                    <a href="{% url 'logout'%}" class="btn btn-primary btn-sm nav-login-btn">logout</a>
+                    <a href="{% url 'accounts:logout'%}" class="btn btn-primary btn-sm nav-login-btn">logout</a>
                     {% else %}
-                    <a href="{% url 'signup'%}" class="btn btn-primary btn-sm nav-login-btn">signup</a>
+                    <a href="{% url 'accounts:signup'%}" class="btn btn-primary btn-sm nav-login-btn">signup</a>
                     {%endif%}
                   </li>
               
@@ -366,7 +357,7 @@
                 <h2 class="banner-title display-1 fw-normal">Best destination for <span class="text-primary">your
                     pets</span>
                 </h2>
-                <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
+                <a href="{% url 'other:shop' %}" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
                   shop now
                   <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
                     <use xlink:href="#arrow-right"></use>
@@ -457,61 +448,70 @@
         </div>
     </div>
 </section>
-
-
-
-<section id="clothing" class="my-5">
+    
   <div class="container pb-5">
     <div class="section-header d-md-flex justify-content-between align-items-center mb-3">
-      <h2 class="display-3 fw-normal">Pet Clothing</h2>
+      <h2 class="display-3 fw-normal">Pet shopping</h2>
       <div></div>
     </div>
-
     <div class="row">
       {% for product in products %}
-      <div class="col-md-4 mb-4">  <!-- Adjust the column size based on your layout preference -->
-        <div class="card h-100 d-flex flex-column">
-          <a href="{% url 'product:product_detail' product.id  %}">
-            <img src="{{ product.img.url }}" class="img-fluid rounded-4" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-          </a>
-          <div class="card-body d-flex flex-column p-3">
-            <a href="single-product.html" class="text-decoration-none">
-              <h3 class="card-title text-truncate mb-2">{{ product.name }}</h3>
-            </a>
-            <div class="card-text mb-3">
-              <h3 class="secondary-font text-primary">{{ product.price }}</h3>
-              <h3 class="secondary-font text-primary">{{ product.category_name }}</h3>
-              <p class="secondary-font text-primary text-truncate">{{ product.desc|truncatechars:40 }}</p>
-            </div>
-            <div class="mt-auto">
-              <div class="d-flex flex-wrap">
-
-                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
-                  Add to Cart
-                </a> 
-                  <a href="{% url 'product:add_to_wishlist' product.id %}" class="btn btn-outline-secondary btn-sm">
-                    <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
-                </a>
-                
-
-                {% comment %} <a href="#" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
-                  Add to Cart
-                </a>
-                <a href="#" class="btn btn-outline-secondary btn-sm">
-                  <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
-                </a> {% endcomment %}
+      <div class="col-md-4 mb-4">
+          <div class="card h-100 d-flex flex-column">
+              <a href="{% url 'product:product_detail' product.id %}">
+                  <img src="{{ product.img.url }}" class="img-fluid rounded-4 mx-auto" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+              </a>
+              <div class="card-body d-flex flex-column p-3" style="padding-top: 0;">
+                  <a href="{% url 'product:product_detail' product.id %}" class="text-decoration-none" style="text-align: left;">
+                      <h3 class="card-title mb-2" style="margin: 0; text-align: left;">{{ product.name }}</h3>
+                  </a>
+                  <div class="card-text mb-3">
+                      <div class="d-flex justify-content-start align-items-center">
+                          {% if product.discount_percentage %}
+                          <!-- Original Price with strikethrough -->
+                          <p class="text-muted" style="font-size: 1.1rem; text-decoration: line-through; margin-right: 10px;">
+                              ${{ product.price|floatformat:2 }}
+                          </p>
+                          <!-- Discount Percentage -->
+                          <p class="text-danger" style="font-size: 1.1rem; font-weight: bold;">
+                              {{ product.discount_percentage }}% OFF
+                          </p>
+                          {% else %}
+                          <!-- Regular Price -->
+                          <p class="text-primary" style="font-size: 1.1rem; font-weight: bold;">
+                              ${{ product.price|floatformat:2 }}
+                          </p>
+                          {% endif %}
+                      </div>
+                      
+                      {% if product.discount_percentage %}
+                      <!-- Discounted Price aligned to the left -->
+                      <p class="text-primary mt-1" style="font-size: 1.1rem; font-weight: bold; text-align: left;">
+                          ${{ product.discount_price|floatformat:2 }}
+                      </p>
+                      {% endif %}
+                      
+                      <h3 class="secondary-font text-primary">{{ product.category_name }}</h3>
+                      <p class="secondary-font text-primary text-truncate">{{ product.desc|truncatechars:40 }}</p>
+                  </div>
+                  <div class="mt-auto">
+                      <div class="d-flex flex-wrap">
+                          <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
+                              Add to Cart
+                          </a>
+                          <a href="{% url 'product:add_to_wishlist' product.id %}" class="btn btn-outline-secondary btn-sm">
+                              <iconify-icon icon="fluent:heart-28-filled" class="fs-5"></iconify-icon>
+                          </a>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
       </div>
       {% endfor %}
     </div>
-  </div>
-</section>
+    
 
-</div>
-</header>
+</header> 
 
   <section id="testimonial">
     <div class="container my-5 py-5">
@@ -526,10 +526,8 @@
                     <iconify-icon icon="ri:double-quotes-l" class="quote-icon text-primary"></iconify-icon>
                   </div>
                   <div class="col-md-10 mt-md-5 p-5 pt-0 pt-md-5">
-                    <p class="testimonial-content fs-2">At the core of our practice is the idea that cities are the
-                      incubators of our
-                      greatest achievements, and the best hope for a sustainable future.</p>
-                    <p class="text-black">- Joshima Lin</p>
+                    <p class="testimonial-content fs-2">"Until one has loved an animal, a part of one's soul remains unawakened."</p>
+                    <p class="text-black">- Anatole France</p>
                   </div>
                 </div>
               </div>
@@ -539,10 +537,8 @@
                     <iconify-icon icon="ri:double-quotes-l" class="quote-icon text-primary"></iconify-icon>
                   </div>
                   <div class="col-md-10 mt-md-5 p-5 pt-0 pt-md-5">
-                    <p class="testimonial-content fs-2">At the core of our practice is the idea that cities are the
-                      incubators of our
-                      greatest achievements, and the best hope for a sustainable future.</p>
-                    <p class="text-black">- Joshima Lin</p>
+                    <p class="testimonial-content fs-2">"Pets are not our whole life, but they make our lives whole."</p>
+                    <p class="text-black">- Roger Caras</p>
                   </div>
                 </div>
               </div>
@@ -552,10 +548,8 @@
                     <iconify-icon icon="ri:double-quotes-l" class="quote-icon text-primary"></iconify-icon>
                   </div>
                   <div class="col-md-10 mt-md-5 p-5 pt-0 pt-md-5">
-                    <p class="testimonial-content fs-2">At the core of our practice is the idea that cities are the
-                      incubators of our
-                      greatest achievements, and the best hope for a sustainable future.</p>
-                    <p class="text-black">- Joshima Lin</p>
+                    <p class="testimonial-content fs-2">"A pet is not just an animal, but a friend who will always love you unconditionally."</p>
+                    <p class="text-black"> – Unknown</p>
                   </div>
                 </div>
               </div>
@@ -569,290 +563,17 @@
       </div>
     </div>
 
-  </section>
-  <section id="register" style="background: url('images/background-img.png') no-repeat;">
-    <div class="container ">
-      <div class="row my-5 py-5">
-        <div class="offset-md-3 col-md-6 my-5 ">
-          <h2 class="display-3 fw-normal text-center">Get 20% Off on <span class="text-primary">first Purchase</span>
-          </h2>
-          <form>
-            <div class="mb-3">
-              <input type="email" class="form-control form-control-lg" name="email" id="email"
-                placeholder="Enter Your Email Address">
-            </div>
-            <div class="mb-3">
-              <input type="password" class="form-control form-control-lg" name="email" id="password1"
-                placeholder="Create Password">
-            </div>
-            <div class="mb-3">
-              <input type="password" class="form-control form-control-lg" name="email" id="password2"
-                placeholder="Repeat Password">
-            </div>
-
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-dark btn-lg rounded-1">Register it now</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="latest-blog" class="my-5">
-    <div class="container py-5 my-5">
-      <div class="row mt-5">
-        <div class="section-header d-md-flex justify-content-between align-items-center mb-3">
-          <h2 class="display-3 fw-normal">Latest Blog Post</h2>
-          <div>
-            <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">
-              Read all
-              <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
-                <use xlink:href="#arrow-right"></use>
-              </svg></a>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4 my-4 my-md-0">
-          <div class="z-1 position-absolute rounded-3 m-2 px-3 pt-1 bg-light">
-            <h3 class="secondary-font text-primary m-0">20</h3>
-            <p class="secondary-font fs-6 m-0">Feb</p>
-
-          </div>
-          <div class="card position-relative">
-            <a href="single-post.html"><img src="{% static "images/blog1.jpg" %}" class="img-fluid rounded-4" alt="image"></a>
-            <div class="card-body p-0">
-              <a href="single-post.html">
-                <h3 class="card-title pt-4 pb-3 m-0">10 Reasons to be helpful towards any animals</h3>
-              </a>
-
-              <div class="card-text">
-                <p class="blog-paragraph fs-6">At the core of our practice is the idea that cities are the incubators of
-                  our greatest
-                  achievements, and the best hope for a sustainable future.</p>
-                <a href="single-post.html" class="blog-read">read more</a>
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 my-4 my-md-0">
-          <div class="z-1 position-absolute rounded-3 m-2 px-3 pt-1 bg-light">
-            <h3 class="secondary-font text-primary m-0">21</h3>
-            <p class="secondary-font fs-6 m-0">Feb</p>
-
-          </div>
-          <div class="card position-relative">
-            <a href="single-post.html"><img src="{% static "images/blog2.jpg" %}" class="img-fluid rounded-4" alt="image"></a>
-            <div class="card-body p-0">
-              <a href="single-post.html">
-                <h3 class="card-title pt-4 pb-3 m-0">How to know your pet is hungry</h3>
-              </a>
-
-              <div class="card-text">
-                <p class="blog-paragraph fs-6">At the core of our practice is the idea that cities are the incubators of
-                  our greatest
-                  achievements, and the best hope for a sustainable future.</p>
-                <a href="single-post.html" class="blog-read">read more</a>
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 my-4 my-md-0">
-          <div class="z-1 position-absolute rounded-3 m-2 px-3 pt-1 bg-light">
-            <h3 class="secondary-font text-primary m-0">22</h3>
-            <p class="secondary-font fs-6 m-0">Feb</p>
-
-          </div>
-          <div class="card position-relative">
-            <a href="single-post.html"><img src="{% static "images/blog3.jpg" %}" class="img-fluid rounded-4" alt="image"></a>
-            <div class="card-body p-0">
-              <a href="single-post.html">
-                <h3 class="card-title pt-4 pb-3 m-0">Best home for your pets</h3>
-              </a>
-
-              <div class="card-text">
-                <p class="blog-paragraph fs-6">At the core of our practice is the idea that cities are the incubators of
-                  our greatest
-                  achievements, and the best hope for a sustainable future.</p>
-                <a href="single-post.html" class="blog-read">read more</a>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="service">
-    <div class="container py-5 my-5">
-      <div class="row g-md-5 pt-4">
-        <div class="col-md-3 my-3">
-          <div class="card">
-            <div>
-              <iconify-icon class="service-icon text-primary" icon="la:shopping-cart"></iconify-icon>
-            </div>
-            <h3 class="card-title py-2 m-0">Free Delivery</h3>
-            <div class="card-text">
-              <p class="blog-paragraph fs-6">Lorem ipsum dolor sit amet, consectetur adipi elit.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 my-3">
-          <div class="card">
-            <div>
-              <iconify-icon class="service-icon text-primary" icon="la:user-check"></iconify-icon>
-            </div>
-            <h3 class="card-title py-2 m-0">100% secure payment</h3>
-            <div class="card-text">
-              <p class="blog-paragraph fs-6">Lorem ipsum dolor sit amet, consectetur adipi elit.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 my-3">
-          <div class="card">
-            <div>
-              <iconify-icon class="service-icon text-primary" icon="la:tag"></iconify-icon>
-            </div>
-            <h3 class="card-title py-2 m-0">Daily Offer</h3>
-            <div class="card-text">
-              <p class="blog-paragraph fs-6">Lorem ipsum dolor sit amet, consectetur adipi elit.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 my-3">
-          <div class="card">
-            <div>
-              <iconify-icon class="service-icon text-primary" icon="la:award"></iconify-icon>
-            </div>
-            <h3 class="card-title py-2 m-0">Quality guarantee</h3>
-            <div class="card-text">
-              <p class="blog-paragraph fs-6">Lorem ipsum dolor sit amet, consectetur adipi elit.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <section id="insta" class="my-5">
-    <div class="row g-0 py-5">
-      <div class="col instagram-item  text-center position-relative">
-        <div class="icon-overlay d-flex justify-content-center position-absolute">
-          <iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
-        </div>
-        <a href="#">
-          <img src="{% static "images/insta1.jpg" %}" alt="insta-img" class="img-fluid rounded-3">
-        </a>
-      </div>
-      <div class="col instagram-item  text-center position-relative">
-        <div class="icon-overlay d-flex justify-content-center position-absolute">
-          <iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
-        </div>
-        <a href="#">
-          <img src="{% static "images/insta2.jpg" %}" alt="insta-img" class="img-fluid rounded-3">
-        </a>
-      </div>
-      <div class="col instagram-item  text-center position-relative">
-        <div class="icon-overlay d-flex justify-content-center position-absolute">
-          <iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
-        </div>
-        <a href="#">
-          <img src="{% static "images/insta3.jpg" %}" alt="insta-img" class="img-fluid rounded-3">
-        </a>
-      </div>
-      <div class="col instagram-item  text-center position-relative">
-        <div class="icon-overlay d-flex justify-content-center position-absolute">
-          <iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
-        </div>
-        <a href="#">
-          <img src="{% static "images/insta4.jpg" %}" alt="insta-img" class="img-fluid rounded-3">
-        </a>
-      </div>
-      <div class="col instagram-item  text-center position-relative">
-        <div class="icon-overlay d-flex justify-content-center position-absolute">
-          <iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
-        </div>
-        <a href="#">
-          <img src="{% static "images/insta5.jpg" %}" alt="insta-img" class="img-fluid rounded-3">
-        </a>
-      </div>
-      <div class="col instagram-item  text-center position-relative">
-        <div class="icon-overlay d-flex justify-content-center position-absolute">
-          <iconify-icon class="text-white" icon="la:instagram"></iconify-icon>
-        </div>
-        <a href="#">
-          <img src="{% static "images/insta6.jpg" %}" alt="insta-img" class="img-fluid rounded-3">
-        </a>
-      </div>
-    </div>
-  </section>
-
   <footer id="footer" class="my-5">
     <div class="container py-5 my-5">
       <div class="row">
 
-        <div class="col-md-3">
-          <div class="footer-menu">
-            <img src="{% static "images/logo.png" %}" alt="logo">
-            <p class="blog-paragraph fs-6 mt-3">Subscribe to our newsletter to get updates about our grand offers.</p>
-            <div class="social-links">
-              <ul class="d-flex list-unstyled gap-2">
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:facebook-fill"></iconify-icon>
-                  </a>
-                </li>
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:twitter-fill"></iconify-icon>
-                  </a>
-                </li>
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:pinterest-fill"></iconify-icon>
-                  </a>
-                </li>
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:instagram-fill"></iconify-icon>
-                  </a>
-                </li>
-                <li class="social">
-                  <a href="#">
-                    <iconify-icon class="social-icon" icon="ri:youtube-fill"></iconify-icon>
-                  </a>
-                </li>
 
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="footer-menu">
-            <h3>Quick Links</h3>
-            <ul class="menu-list list-unstyled">
-              <li class="menu-item">
-                <a href="#" class="nav-link">Home</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">About us</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Offer </a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Services</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Conatct Us</a>
-              </li>
-            </ul>
-          </div>
+  <div id="footer-bottom">
+    <div class="container">
+      <hr class="m-0">
+      <div class="row mt-3">
+        <div class="col-md-6 copyright">
+          <p class="secondary-font">© 2023 Waggy. All rights reserved.</p>
         </div>
   
 

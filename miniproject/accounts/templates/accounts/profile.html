@@ -1,8 +1,96 @@
-<!-- In accounts/templates/accounts/profile.html -->
-<h1>Profile</h1>
-<p>First name: {{ user.first_name }}</p>
-<p>Last name: {{ user.last_name }}</p>
-<p>Email: {{ user.email }}</p>
-<p>Phone number: {{ user.phone_number }}</p>  <!-- Adjust field names as needed -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #F9E5D3; /* Light complementary color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-{% comment %} <a href="{% url 'accounts:update_profile' %}">Edit Profile</a> {% endcomment %}
+        .profile-container {
+            max-width: 600px;
+            width: 100%;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            text-align: center;
+        }
+
+        .profile-container:before {
+            content: '';
+            width: 100px;
+            height: 100px;
+            background: url('https://example.com/cute-paw.png') no-repeat center center/cover;
+            position: absolute;
+            top: -50px;
+            left: calc(50% - 50px);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #DEAD6F;
+            margin-bottom: 20px;
+        }
+
+        .profile-details p {
+            font-size: 1rem;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .profile-details strong {
+            color: #DEAD6F;
+        }
+
+        .profile-actions {
+            margin-top: 20px;
+        }
+
+        .profile-actions .btn {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #fff;
+            text-decoration: none;
+            background-color: #DEAD6F;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-actions .btn:hover {
+            background-color: #c09c61;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Profile</h1>
+        <div class="profile-details">
+            <p><strong>First Name:</strong> {{ user.first_name }}</p>
+            <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+        </div>
+        <div class="profile-actions">
+            <a href="{% url 'accounts:edit_profile' %}" class="btn">Edit Profile</a>
+            <a href="{% url 'accounts:change_password' %}" class="btn">Change Password</a>
+            <a href="{% url 'order:my_order' %}" class="btn">my_order</a>
+            <a href="{% url 'accounts:wallet' %}" class="btn">wallet</a>
+
+
+        </div>
+    </div>
+</body>
+</html>

@@ -3,9 +3,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from product.models import Product
 from .models import Cart, CartItem
+from admindashboard.decorators import admin_restricted
 
-@login_required
+@admin_restricted
+@login_required(login_url='accounts:login_view')
 def add_to_cart(request, product_id):
+    
+    if request.user.is_staff or request.user.is_superuser:
+        messages.error(request, "Admins cannot add items to the cart.")
+        return redirect('home')
+
     product = get_object_or_404(Product, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
    
@@ -17,14 +24,21 @@ def add_to_cart(request, product_id):
     messages.success(request, f"{product.name} has been added to your cart.")
     return redirect('cart_view')  
 
-
-
-
-@login_required
+@admin_restricted
+@login_required(login_url='accounts:login_view')
 def cart_view(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
-    items = cart.items.all()
-    # total_price = sum(item.product.price * item.quantity for item in items)
+    items = CartItem.objects.filter(cart=cart)  # Fetch items from the cart
+
+    # Check if the cart is empty
+    if not items.exists():
+        messages.info(request, "Your cart is empty. Please add something.")
+        context = {
+            'items': [],
+            'total_price': 0,
+        }
+        return render(request, 'cart/cart.html', context)
+
     for item in items:
         # Ensure 'discount_percentage' is the field name in the Product model
         if item.product.discount_percentage:
@@ -32,23 +46,24 @@ def cart_view(request):
         else:
             item.discount_price = item.product.price
         item.total_price = item.discount_price * item.quantity
+        item.save()
 
     total_price = sum(item.total_price for item in items)
 
-    
     context = {
         'items': items,
         'total_price': total_price,
     }
     return render(request, 'cart/cart.html', context)
 
-
+@admin_restricted
 def increase_quantity(request, cart_item_id):
     cart_item = CartItem.objects.get(id=cart_item_id)
     cart_item.quantity += 1
     cart_item.save()
     return redirect('cart_view')
 
+@admin_restricted
 def decrease_quantity(request, cart_item_id):
     cart_item = CartItem.objects.get(id=cart_item_id)
     if cart_item.quantity > 1:
@@ -56,6 +71,7 @@ def decrease_quantity(request, cart_item_id):
         cart_item.save()
     return redirect('cart_view')
 
+@admin_restricted
 def remove_from_cart(request, cart_item_id):
     cart_item = CartItem.objects.get(id=cart_item_id)
     cart_item.delete()

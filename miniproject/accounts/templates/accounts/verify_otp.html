@@ -5,7 +5,7 @@
     <button type="submit">Verify OTP</button>
 </form> {% endcomment %}
 
-
+{% comment %} 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,7 +63,7 @@
 
 <div class="container otp-container">
     <div class="otp-header">Verify OTP</div>
-    <form method="post" action="{% url 'verify_otp' %}">
+    <form method="post" action="{% url 'accounts:verify_otp' %}">
         {% csrf_token %}
         <div class="form-group">
             <label for="otp">Enter OTP</label>
@@ -76,4 +76,124 @@
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #F9E5D3; /* Light complementary color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .otp-container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .otp-container:before {
+            content: '';
+            width: 100px;
+            height: 100px;
+            background: url('https://example.com/cute-paw.png') no-repeat center center/cover;
+            position: absolute;
+            top: -50px;
+            left: calc(50% - 50px);
+        }
+
+        .otp-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #DEAD6F;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #DEAD6F;
+        }
+
+        .form-control {
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            background-color: #DEAD6F;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .verify-btn:hover {
+            background-color: #c09c61;
+        }
+    </style>
+</head>
+<body>
+{% comment %} 
+<div class="container otp-container">
+    <div class="otp-header">Verify OTP</div>
+    <form method="post" action="{% url 'accounts:verify_otp' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="otp">Enter OTP</label>
+            <input type="text" name="otp" id="otp" class="form-control" required placeholder="6-digit OTP">
+        </div>
+        <button type="submit" class="btn verify-btn">Verify OTP</button>
+    </form>
+</div> {% endcomment %}
+
+<div class="container otp-container">
+    {% if messages %}
+        <div class="alert alert-danger">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="otp-header">Verify OTP</div>
+    <form method="post" action="{% url 'accounts:verify_otp' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="otp">Enter OTP</label>
+            <input type="text" name="otp" id="otp" class="form-control" required placeholder="6-digit OTP">
+        </div>
+        <button type="submit" class="btn verify-btn">Verify OTP</button>
+    </form>
+</div>
+
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

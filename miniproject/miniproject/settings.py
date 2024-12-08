@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ TEMP_DIR =BASE_DIR / "templates"
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-320*fg0_jxj3xdil^v=)iu$f(8(hpac88c4l5o5b2rd-y&e=ks'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG',cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'admindashboard',
     'cart',
     'order',
+    'other',
     
 ]
 
@@ -69,7 +71,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-        },
+        }, 
     },
 ]
 
@@ -82,11 +84,11 @@ WSGI_APPLICATION = 'miniproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'miniproject',
-        'HOST': 'localhost',
+        'NAME': config('DB_NAME'),
+        'HOST': config('DB_HOST'),
         'PORT': '5432',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
+        'USER':config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
     }
 }
 
@@ -141,9 +143,17 @@ MEDIA_ROOT = BASE_DIR / "media"  # Directory to store uploaded media files
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+LOGIN_URL = 'login'
+# LOGIN_URL = '/accounts/login/'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = config('EMAILHOST')
+EMAIL_PORT = config('EMAILPORT')
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sumayyaubaid500@gmail.com'
-EMAIL_HOST_PASSWORD = 'nheu ceza bgcm wevl'
+EMAIL_HOST_USER = config('EMAILHOSTUSER')
+EMAIL_HOST_PASSWORD = config('EMAILHOSTPASSWORD')
+
+
+STRIPE_PUBLIC_KEY='pk_test_51QMmA1C6oJB8rYzbaOOWjj4ssb4mnTqiuWvGmKbgSFA9RGXK40PNvK7oDHqALj1ErbVgeKotJpCZLAnlQDZ9de2300XnQ2LaOI '
+STRIPE_SECRET_KEY='sk_test_51QMmA1C6oJB8rYzbDRW8leR2zeaKPO3fbIQc4AFrahYsBZW73AVQWuUPpJzk0vEUJOiOa2miLbFTdkoxjtj1Pw2S0051O02RVd'

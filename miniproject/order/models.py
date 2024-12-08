@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from product.models import Product 
-from cart.models import Cart 
+from cart.models import Cart ,CartItem
 from accounts.models import CustomUser
 
 
@@ -25,7 +25,8 @@ class Orders(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-
+    items = models.ManyToManyField(CartItem) # Properly reference CartItem
+    
     ORDER_STATUS = (
         ("Pending", "Pending"),
         ("Dispatched", "Dispatched"),
@@ -43,7 +44,7 @@ class Orders(models.Model):
     return_requested = models.BooleanField(default=False)
     return_approved = models.BooleanField(default=False)
     is_refunded = models.BooleanField(default=False)  # Track if the order has been refunded
-
+    
     PAYMENT_METHOD_CHOICES = [
         ('COD', 'Cash on Delivery'),
         ('STRIPE', 'Stripe'),
@@ -52,7 +53,21 @@ class Orders(models.Model):
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='COD')
 
 
+    PAYMENT_STATUS_CHOICES = [
+        ('Payment_Pending', 'Payment Pending'),
+        ('Payment_Succeeded', 'Payment Succeeded'),
+        ('Payment_Failed', 'Payment Failed'),
+    ]
+      
+    payment_status = models.CharField(max_length=50, choices=PAYMENT_STATUS_CHOICES, default='Payment_Pending')
     def __str__(self):
         return f"Order {self.id} for {self.cart.user.email}"
 
 
+class Payments(models.Model):
+    order = models.OneToOneField(Orders, on_delete=models.CASCADE)
+    payment_id = models.CharField(max_length=100, blank=True, null=True)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.CharField(max_length=50, default='Payment_Pending')
+    def __str__(self):
+        return f"Payment {self.payment_id or 'N/A'} for Order {self.order.id}"

@@ -3,6 +3,7 @@ from product.forms import ProductForm
 from django.contrib import messages
 from .models import Product,Category,Wishlist
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 def product(request):
     if request.method == 'POST':
@@ -23,6 +24,40 @@ def product(request):
         }
 
     return render(request, 'product/add_product.html', context)
+
+
+def product_search(request):
+    query = request.GET.get('q', '')  # Get the search query from the request
+    category_query = request.GET.get('category', '')  # Get the category query from the request
+    
+    # Base queryset
+    products = Product.objects.all()
+    
+    # Apply search query filter
+    if query:
+        products = products.filter(name__icontains=query)
+    
+    # Apply category filter if provided
+    if category_query:
+        products = products.filter(category__categoryname__icontains=category_query)  # Assuming `category` is a related field
+    
+    # Check if any products were found
+    no_products_message = None
+    if not products.exists():  # No products found
+        no_products_message = "No products available for your search."
+    
+    context = {
+        'query': query,
+        'category_query': category_query,
+        'products': products,
+        'no_products_message': no_products_message,
+    }
+    return render(request, 'accounts/index.html', context)
+
+
+
+
+
 
 @login_required
 def product_detail_view(request, product_id):

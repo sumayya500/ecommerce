@@ -674,3 +674,36 @@ Single Product section style start
   color: var(--light-color);
   background-color: var(--accent-color);
 }
+
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+.card:hover {
+  transform: translateY(-10px);
+}
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+.card-body {
+  text-align: center;
+}
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgb(255, 0, 0);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #dc3545;  /* Bootstrap's danger color */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9em;
+}

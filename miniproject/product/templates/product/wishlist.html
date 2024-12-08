@@ -6,14 +6,15 @@
     <title>Your Wishlist</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #F9E5D3;
             margin: 0;
             padding: 20px;
         }
         h1, h2 {
-            color: #333;
+            color: #DEAD6F;
             text-align: center;
+            margin-bottom: 20px;
         }
         .wishlist, .products {
             display: flex;
@@ -32,11 +33,12 @@
         .wishlist-item, .product-item {
             background-color: #fff;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: transform 0.3s;
+            position: relative;
         }
         .wishlist-item:hover, .product-item:hover {
             transform: scale(1.03);
@@ -48,7 +50,7 @@
             border-radius: 8px;
         }
         .wishlist-item h2, .product-item h3 {
-            color: #333;
+            color: #DEAD6F;
             margin: 10px 0;
         }
         .wishlist-item p, .product-item p {
@@ -60,19 +62,29 @@
             margin-top: 10px;
             padding: 8px 16px;
             color: #fff;
-            background-color: #007bff;
-            border-radius: 5px;
+            border-radius: 8px;
             text-decoration: none;
             transition: background-color 0.3s;
         }
+        .add-to-wishlist {
+            background-color: #DEAD6F;
+        }
         .add-to-wishlist:hover {
-            background-color: #0056b3;
+            background-color: #c09c61;
         }
         .remove-from-wishlist {
-            background-color: #dc3545;
+            background-color: #DEAD6F;
         }
         .remove-from-wishlist:hover {
-            background-color: #c82333;
+            background-color: #c09c61;
+        }
+        .cute-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: url('https://example.com/cute-icon.png') no-repeat center center/cover;
         }
     </style>
 </head>
@@ -85,6 +97,7 @@
         <ul class="wishlist-items">
             {% for item in wishlist_items %}
                 <li class="wishlist-item">
+                    <div class="cute-icon"></div>
                     <h2>{{ item.product.name }}</h2>
                     <p>Price: ${{ item.product.price }}</p>
                     <p>Description: {{ item.product.desc }}</p>
