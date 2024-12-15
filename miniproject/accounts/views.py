@@ -84,7 +84,44 @@ def verify_otp_view(request):
             return redirect('accounts:verify_otp')
     return render(request, 'accounts/verify_otp.html')
 
+# def login_view(request):
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             password = form.cleaned_data['password']
+
+#             # Attempt to authenticate the user
+#             user = authenticate(request, username=email, password=password)
+
+#             if user is not None:
+#                 # Check if the user is staff
+#                 if user.is_staff:
+#                     auth_login(request, user)  # Log the staff user in
+#                     messages.success(request, "Welcome back! You are now logged in as an admin.")
+#                     return redirect('admindashboard:admin_dashboard')  # Redirect to admin dashboard 
+#                 if user.email_verified:
+#                     auth_login(request, user)  # Log the regular user in
+#                     messages.success(request, "Welcome back! You are now logged in.")
+#                     return redirect('accounts:home')  # Redirect to home for regular users
+#                 else:
+#                     messages.error(request, "Please verify your email before logging in.")
+#                     return redirect('accounts:login')  # Redirect back to login if email is not verified
+#             else:
+#                 messages.error(request, "Invalid email or password. Please try again.")
+                
+#     else:
+#         form = LoginForm()  # Create a new form instance if not a POST request
+
+      
+#     return render(request, 'accounts/login.html', {'form': form})  # Ensure this template exists
+
+
 def login_view(request):
+    # Clear any session or user data that may have been carried over from previous logins
+    if 'email' in request.session:
+        del request.session['email']
+    
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -95,27 +132,24 @@ def login_view(request):
             user = authenticate(request, username=email, password=password)
 
             if user is not None:
-                # Check if the user is staff
                 if user.is_staff:
-                    auth_login(request, user)  # Log the staff user in
-                    messages.success(request, "Welcome back! You are now logged in as an admin.")
-                    return redirect('admindashboard:admin_dashboard')  # Redirect to admin dashboard 
+                    auth_login(request, user)
+                    messages.success(request, f"Welcome back, {user.first_name}! You are now logged in as an admin.")
+                    return redirect('admindashboard:admin_dashboard')
                 if user.email_verified:
-                    auth_login(request, user)  # Log the regular user in
-                    messages.success(request, "Welcome back! You are now logged in.")
-                    return redirect('accounts:home')  # Redirect to home for regular users
+                    auth_login(request, user)
+                    messages.success(request, f"Welcome back, {user.first_name}!")
+                    return redirect('accounts:home')
                 else:
                     messages.error(request, "Please verify your email before logging in.")
-                    return redirect('accounts:login')  # Redirect back to login if email is not verified
+                    return redirect('accounts:login')
             else:
                 messages.error(request, "Invalid email or password. Please try again.")
-                
     else:
         form = LoginForm()  # Create a new form instance if not a POST request
 
-      
-    return render(request, 'accounts/login.html', {'form': form})  # Ensure this template exists
-    
+    return render(request, 'accounts/login.html', {'form': form})
+
 @login_required
 def home_view(request):
     products = Product.objects.all()[:6]  # Fetch all products

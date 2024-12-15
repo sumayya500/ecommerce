@@ -306,7 +306,7 @@
 
                   </li>
                   <li>
-                      <a href="{% url 'cart_view' %}"><iconify-icon icon="mdi:cart" class="fs-4"></iconify-icon></a>  
+                      <a href="{% url 'cart:cart_view' %}"><iconify-icon icon="mdi:cart" class="fs-4"></iconify-icon></a>  
                       </a>
                   </li>
                   <li class="nav-item">
@@ -496,7 +496,7 @@
                   </div>
                   <div class="mt-auto">
                       <div class="d-flex flex-wrap">
-                          <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
+                          <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-outline-dark me-3 flex-grow-1 btn-sm">
                               Add to Cart
                           </a>
                           <a href="{% url 'product:add_to_wishlist' product.id %}" class="btn btn-outline-secondary btn-sm">
