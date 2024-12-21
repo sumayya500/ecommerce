@@ -425,7 +425,7 @@
             <p class="product-category">Category: {{ product.category }}</p>
             
             <div class="actions">
-                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+                <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
                 
                 {% if is_in_wishlist %}
                     <span class="text-success">Already in Wishlist</span>
