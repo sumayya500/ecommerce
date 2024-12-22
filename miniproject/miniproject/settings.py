@@ -84,11 +84,11 @@ WSGI_APPLICATION = 'miniproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'HOST': config('DB_HOST'),
+        'NAME': 'backendcourse',
+        'HOST':'backendourse.cvqgeymiktva.eu-north-1.rds.amazonaws.com',
         'PORT': '5432',
-        'USER':config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
+        'USER':'mysuperuser',
+        'PASSWORD': 'mysuperuser',
     }
 }
 
