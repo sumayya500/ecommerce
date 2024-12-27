@@ -84,14 +84,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from product.models import Product
 from .models import Cart, CartItem
-from admindashboard.decorators import admin_restricted
 
-@admin_restricted
-@login_required(login_url='accounts:login_view')
+
+@login_required(login_url='/accounts/login/')
 def add_to_cart(request, product_id):
-    if request.user.is_staff or request.user.is_superuser:
-        messages.error(request, "Admins cannot add items to the cart.")
-        return redirect('home')
+    # Debug: Print user status
+    print(f"Is authenticated: {request.user.is_authenticated}")
+    print(f"User: {request.user}")
 
     product = get_object_or_404(Product, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -104,9 +103,7 @@ def add_to_cart(request, product_id):
     messages.success(request, f"{product.name} has been added to your cart.")
     return redirect('cart:cart_view')
 
-
-@admin_restricted
-@login_required(login_url='accounts:login_view')
+@login_required(login_url='accounts:login')
 def cart_view(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     items = CartItem.objects.filter(cart=cart)
@@ -117,6 +114,7 @@ def cart_view(request):
             discount_price = item.product.price * (1 - item.product.discount_percentage / 100)
         else:
             discount_price = item.product.price
+        item.discount_price = discount_price  # Add this field to pass the discounted price
         item.total_price = discount_price * item.quantity
         total_price += item.total_price
 
@@ -126,8 +124,6 @@ def cart_view(request):
     }
     return render(request, 'cart/cart.html', context)
 
-
-@admin_restricted
 def increase_quantity(request, cart_item_id):
     cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
     cart_item.quantity += 1
@@ -135,7 +131,6 @@ def increase_quantity(request, cart_item_id):
     return redirect('cart:cart_view')
 
 
-@admin_restricted
 def decrease_quantity(request, cart_item_id):
     cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
     if cart_item.quantity > 1:
@@ -146,7 +141,7 @@ def decrease_quantity(request, cart_item_id):
     return redirect('cart:cart_view')
 
 
-@admin_restricted
+
 def remove_from_cart(request, cart_item_id):
     cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
     cart_item.delete()

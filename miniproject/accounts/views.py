@@ -84,7 +84,12 @@ def verify_otp_view(request):
             return redirect('accounts:verify_otp')
     return render(request, 'accounts/verify_otp.html')
 
+
 # def login_view(request):
+#     # Clear any session or user data that may have been carried over from previous logins
+#     if 'email' in request.session:
+#         del request.session['email']
+    
 #     if request.method == 'POST':
 #         form = LoginForm(request.POST)
 #         if form.is_valid():
@@ -95,31 +100,31 @@ def verify_otp_view(request):
 #             user = authenticate(request, username=email, password=password)
 
 #             if user is not None:
-#                 # Check if the user is staff
 #                 if user.is_staff:
-#                     auth_login(request, user)  # Log the staff user in
-#                     messages.success(request, "Welcome back! You are now logged in as an admin.")
-#                     return redirect('admindashboard:admin_dashboard')  # Redirect to admin dashboard 
+#                     auth_login(request, user)
+#                     messages.success(request, f"Welcome back, {user.first_name}! You are now logged in as an admin.")
+#                     return redirect('admindashboard:admin_dashboard')
 #                 if user.email_verified:
-#                     auth_login(request, user)  # Log the regular user in
-#                     messages.success(request, "Welcome back! You are now logged in.")
-#                     return redirect('accounts:home')  # Redirect to home for regular users
+#                     auth_login(request, user)
+#                     messages.success(request, f"Welcome back, {user.first_name}!")
+#                     return redirect('accounts:home')
 #                 else:
 #                     messages.error(request, "Please verify your email before logging in.")
-#                     return redirect('accounts:login')  # Redirect back to login if email is not verified
+#                     return redirect('accounts:login')
 #             else:
 #                 messages.error(request, "Invalid email or password. Please try again.")
-                
 #     else:
 #         form = LoginForm()  # Create a new form instance if not a POST request
 
-      
-#     return render(request, 'accounts/login.html', {'form': form})  # Ensure this template exists
+#     return render(request, 'accounts/login.html', {'form': form})
+import logging
 
+logger = logging.getLogger(__name__)
 
 def login_view(request):
-    # Clear any session or user data that may have been carried over from previous logins
+    # Clear any session or user data
     if 'email' in request.session:
+        logger.info(f"Clearing session for email: {request.session['email']}")
         del request.session['email']
     
     if request.method == 'POST':
@@ -128,27 +133,37 @@ def login_view(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
 
-            # Attempt to authenticate the user
-            user = authenticate(request, username=email, password=password)
+            logger.info(f"Attempting login for email: {email}")
 
+            # Authenticate user
+            user = authenticate(request, username=email, password=password)
             if user is not None:
                 if user.is_staff:
+                    logger.info(f"Admin login: {email}")
                     auth_login(request, user)
                     messages.success(request, f"Welcome back, {user.first_name}! You are now logged in as an admin.")
                     return redirect('admindashboard:admin_dashboard')
                 if user.email_verified:
+                    logger.info(f"Regular user login: {email}")
                     auth_login(request, user)
                     messages.success(request, f"Welcome back, {user.first_name}!")
                     return redirect('accounts:home')
                 else:
+                    logger.warning(f"Email not verified for user: {email}")
                     messages.error(request, "Please verify your email before logging in.")
                     return redirect('accounts:login')
             else:
+                logger.warning(f"Invalid login attempt for email: {email}")
                 messages.error(request, "Invalid email or password. Please try again.")
+        else:
+            logger.warning("Invalid form submission.")
     else:
-        form = LoginForm()  # Create a new form instance if not a POST request
+        form = LoginForm()
 
     return render(request, 'accounts/login.html', {'form': form})
+
+
+
 
 @login_required
 def home_view(request):

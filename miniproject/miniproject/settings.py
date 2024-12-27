@@ -144,7 +144,7 @@ MEDIA_ROOT = BASE_DIR / "media"  # Directory to store uploaded media files
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-LOGIN_URL = 'login'
+LOGIN_URL = '/accounts/login/'
 # LOGIN_URL = '/accounts/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
