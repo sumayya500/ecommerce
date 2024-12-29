@@ -81,12 +81,12 @@ def category_view(request, category_name):
     return render(request, 'product/category.html', context)
 
 
-
+@login_required(login_url='/login')
 def wishlist(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
     return render(request, 'product/wishlist.html', {'wishlist_items': wishlist_items, 'product':product})
 
-
+@login_required(login_url='/login')
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     if Wishlist.objects.filter(user=request.user, product=product).exists():

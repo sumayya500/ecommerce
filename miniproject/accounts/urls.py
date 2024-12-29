@@ -6,9 +6,9 @@ from .views import signup_view, verify_otp_view, login_view
 app_name = 'accounts'
 
 urlpatterns = [
-    # path('', views.login_view, name='login'), 
-    path('', views.index, name='index'), # Index view for accounts
-    path('accounts/signup/', signup_view, name='signup'),  # Signup view
+    # path('', views.home_view, name='home'), 
+    path('', views.index,name='index'), # Index view for accounts
+    path('accounts/signup/ ', signup_view, name='signup'),  # Signup view
     path('verify_otp/', verify_otp_view, name='verify_otp'),  # OTP verification view
     path('login/', login_view, name='login'),  # Login view
     path('home/', views.home_view, name='home'),  # Home view

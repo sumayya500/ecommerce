@@ -17,10 +17,20 @@ from .forms import EditProfileForm
 from django.contrib.auth.forms import PasswordChangeForm
 import string
 from django.contrib.auth import get_user_model
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
+@never_cache
 def index(request):
+    if request.user.is_authenticated:
+        # If the user is a superuser, you can redirect to a special page or admin dashboard
+        if request.user.is_superuser:
+            return redirect('admindashboard:admindashboard')  # Replace with the actual URL for the admin dashboard or home
     products = Product.objects.all()[:6]
     context = {'products': products}
+    # if request.user.is_authenticated:
+    #     return redirect('accounts:home')  # R
     return render(request,'accounts/index.html',context)
  
 def generate_otp():
@@ -84,39 +94,6 @@ def verify_otp_view(request):
             return redirect('accounts:verify_otp')
     return render(request, 'accounts/verify_otp.html')
 
-
-# def login_view(request):
-#     # Clear any session or user data that may have been carried over from previous logins
-#     if 'email' in request.session:
-#         del request.session['email']
-    
-#     if request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             password = form.cleaned_data['password']
-
-#             # Attempt to authenticate the user
-#             user = authenticate(request, username=email, password=password)
-
-#             if user is not None:
-#                 if user.is_staff:
-#                     auth_login(request, user)
-#                     messages.success(request, f"Welcome back, {user.first_name}! You are now logged in as an admin.")
-#                     return redirect('admindashboard:admin_dashboard')
-#                 if user.email_verified:
-#                     auth_login(request, user)
-#                     messages.success(request, f"Welcome back, {user.first_name}!")
-#                     return redirect('accounts:home')
-#                 else:
-#                     messages.error(request, "Please verify your email before logging in.")
-#                     return redirect('accounts:login')
-#             else:
-#                 messages.error(request, "Invalid email or password. Please try again.")
-#     else:
-#         form = LoginForm()  # Create a new form instance if not a POST request
-
-#     return render(request, 'accounts/login.html', {'form': form})
 import logging
 
 logger = logging.getLogger(__name__)
@@ -164,7 +141,7 @@ def login_view(request):
 
 
 
-
+@never_cache
 @login_required
 def home_view(request):
     products = Product.objects.all()[:6]  # Fetch all products
@@ -181,9 +158,11 @@ def home_view(request):
     return render(request, 'accounts/home.html', context)
 
     
-
+@never_cache
 @login_required
 def logout_view(request):
+    logout(request)
+    request.session.flush()
     return render(request,'accounts/login.html')
 
 
@@ -205,20 +184,38 @@ def edit_profile_view(request):
     return render(request, 'accounts/edit_profile.html', {'form': form})
 
 
+# @login_required
+# def change_password_view(request):
+#     if request.method == 'POST':
+#         form = PasswordChangeForm(user=request.user, data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             # Update the session to keep the user logged in
+#             update_session_auth_hash(request, form.user)
+#             messages.success(request, 'Your password has been changed successfully.')
+#             return redirect('accounts:profile')  # Redirect to the profile page after successful password change
+#         else:
+#             messages.error(request, 'Please correct the errors below.')
+#     else:
+#         form = PasswordChangeForm(user=request.user)
+#     return render(request, 'accounts/change_password.html', {'form': form})
+
+
 @login_required
 def change_password_view(request):
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            # Update the session to keep the user logged in
+            # Update the session to keep the user logged in after the password change
             update_session_auth_hash(request, form.user)
             messages.success(request, 'Your password has been changed successfully.')
-            return redirect('accounts:profile')  # Redirect to the profile page after successful password change
+            return redirect('accounts:profile')  # Update with your correct profile page URL pattern name
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
         form = PasswordChangeForm(user=request.user)
+    
     return render(request, 'accounts/change_password.html', {'form': form})
 
 

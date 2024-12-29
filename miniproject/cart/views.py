@@ -84,11 +84,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from product.models import Product
 from .models import Cart, CartItem
+from admindashboard.decorators import admin_restricted
 
-
-@login_required(login_url='/accounts/login/')
+@admin_restricted
+@login_required(login_url='/login')
 def add_to_cart(request, product_id):
     # Debug: Print user status
+    
+    if request.user.is_staff or request.user.is_superuser:
+        messages.error(request, "Admins cannot add items to the cart.")
+        # return redirect('home')
     print(f"Is authenticated: {request.user.is_authenticated}")
     print(f"User: {request.user}")
 
@@ -103,7 +108,7 @@ def add_to_cart(request, product_id):
     messages.success(request, f"{product.name} has been added to your cart.")
     return redirect('cart:cart_view')
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='/login')
 def cart_view(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     items = CartItem.objects.filter(cart=cart)

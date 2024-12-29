@@ -294,15 +294,19 @@
 
                   </li>
                   <li>
+                  {% comment %} {% if user.is_authenticated%} {% endcomment %}
+                    {% comment %} <a href="{% url 'accounts:logout'%}" class="btn btn-primary btn-sm nav-login-btn">logout</a> {% endcomment %}
+                  </li>
                     <a href="{% url 'cart:cart_view' %}"><iconify-icon icon="mdi:cart" class="fs-4"></iconify-icon></a>
                     </a>
                   </li>
+                  {% comment %} {% else %} {% endcomment %}
                   <li class="nav-item">
                       <a href="{% url 'accounts:signup'%}" class="btn btn-primary btn-sm nav-login-btn">signup</a>
                   </li>
+                {% comment %} {% endif %} {% endcomment %}
               </ul>
-          </div>
-          
+          </div> 
           <style>
               /* Styles for the Login button to ensure elegance and spacing */
               .nav-login-btn {
