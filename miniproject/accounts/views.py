@@ -26,7 +26,7 @@ def index(request):
     if request.user.is_authenticated:
         # If the user is a superuser, you can redirect to a special page or admin dashboard
         if request.user.is_superuser:
-            return redirect('admindashboard:admindashboard')  # Replace with the actual URL for the admin dashboard or home
+            return redirect('admindashboard:admin_dashboard')  # Replace with the actual URL for the admin dashboard or home
     products = Product.objects.all()[:6]
     context = {'products': products}
     # if request.user.is_authenticated:

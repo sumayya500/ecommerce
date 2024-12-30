@@ -59,17 +59,33 @@ def product_search(request):
 
 
 
-@login_required
+# @login_required
+# def product_detail_view(request, product_id):
+#     product = get_object_or_404(Product, id=product_id)
+#     context = {
+#         'product': product,
+#         'is_in_wishlist': product in request.user.wishlist.all()  # check if product is in wishlist
+#     }
+#     return render(request, 'product/productdetail.html', context)
+
+# def product_detail_view(request, product_id):
+#     product = get_object_or_404(Product, id=product_id)
+#     is_in_wishlist = request.user.is_authenticated and product in request.user.wishlist.all()
+#     context = {
+#         'product': product,
+#         'is_in_wishlist': is_in_wishlist,
+#     }
+#     return render(request, 'product/productdetail.html', context)
+
+
 def product_detail_view(request, product_id):
+    # Retrieve the product or show a 404 error if not found
     product = get_object_or_404(Product, id=product_id)
+    
     context = {
         'product': product,
-        # 'is_in_wishlist': product in request.user.wishlist.all()  # check if product is in wishlist
     }
     return render(request, 'product/productdetail.html', context)
-
-
-
 
 def category_view(request, category_name):
     category = get_object_or_404(Category, categoryname=category_name)
